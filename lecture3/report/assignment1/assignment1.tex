@@ -1,0 +1,75 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+\begin{equation}
+    T(z) = \lambda |z| + u (\theta - z) + \frac{1}{2} (\theta - z) ^2
+    \qquad (\lambda \ge 0)
+\end{equation}
+について，
+\begin{equation}
+    \arg\min_z T(z) = \max(0,\ \theta + u - \lambda) + \min(0,\ \theta + u + \lambda)
+\end{equation}
+であることを証明する。
+
+\begin{align}
+    \pdv{T}{z}
+        & = \lambda \mathrm{sign}(z) - u + (z - \theta) \\
+        & = z - (\theta + u - \lambda \mathrm{sign}(z)) \\
+    \pdv[2]{T}{z} & = 1 \quad (> 0)
+\end{align}
+より，\(T\)は下に凸な関数である。
+以下では\(z\)の正負について場合分けをし，
+\(T\)に最小を与える\(z\)を求める。
+
+\(z \ge 0\)のとき，
+\begin{equation}
+    \pdv{T}{z} = z - (\theta + u - \lambda)
+\end{equation}
+\begin{enumerate}
+    \item \(\theta + u \le \lambda\)のとき \\
+        \(\forall z \ge 0\)に対して\(\pdv*{T}{z} \ge 0\)が成立し，\(T\)は増加関数となるので，
+        \(T\)に最小を与える\(z = 0\)となる。
+    \item \(\theta + u \ge \lambda\)のとき \\
+        \(T\)は下に凸な関数であるから，\(\pdv*{T}{z} = 0\)を与える\(z\)が\(T\)に最小を与える。
+        よって\(z = \theta + u - \lambda\)となる。
+\end{enumerate}
+これをまとめると，
+\begin{equation}
+    \arg\min_z T(z) = \max(0,\ \theta + u - \lambda)
+\end{equation}
+
+\(z \le 0\)のとき，
+\begin{equation}
+    \pdv{T}{z} = z - (\theta + u + \lambda)
+\end{equation}
+\begin{enumerate}
+    \item \(\theta + u \ge -\lambda\)のとき \\
+        \(\forall z \le 0\)に対して\(\pdv*{T}{z} \le 0\)が成立し，\(T\)は減少関数となるので，
+        \(T\)に最小を与える\(z = 0\)となる。
+    \item \(\theta + u \le -\lambda\)のとき \\
+        \(\pdv*{T}{z} = 0\)を与える\(z = \theta + u + \lambda\)が\(T\)に最小を与える。
+\end{enumerate}
+これをまとめると，
+\begin{equation}
+    \arg\min_z T(z) = \min(0,\ \theta + u + \lambda)
+\end{equation}
+
+以上をグラフで表すと，図\ref{fig:z_theta_curve}のようになる。
+
+\begin{figure}
+    \centering
+    \input{../figures/z_theta_curve}
+    \caption{\(z - \theta+u\)曲線}
+    \label{fig:z_theta_curve}
+\end{figure}
+
+以上より，
+\begin{equation}
+    \arg\min_z T(z) = \max(0,\ \theta + u - \lambda) + \min(0,\ \theta + u + \lambda)
+\end{equation}
+であることがわかる。
+
+
+\end{document}

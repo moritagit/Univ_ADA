@@ -1,0 +1,31 @@
+%% preamble for Numerical-structure-analysis report
+
+\input{/Users/User/Documents/Project/TeX/preamble/mypreamble}
+
+%% titles
+\title{先端データ解析論　レポート}
+\author{37-196360 \quad 森田涼介}
+
+
+%% setting for listings
+\newtcbinputlisting[auto counter]{\reportlisting}[3][]{%
+	listing file = {#3},
+	listing options = {language=python, style=tcblatex, numbers=left, numberstyle=\tiny},
+	listing only,
+	breakable,
+	toprule at break = 0mm,
+	bottomrule at break = 0mm,
+	left = 6mm,
+	sharp corners,
+	drop shadow,
+	title = Listings \thetcbcounter : \texttt{#2},
+	label = #1,
+	}
+
+
+
+%% title format
+\usepackage{titlesec}
+\titleformat{\section}{\LARGE}{宿題\thesection}{0zw}{}
+\newcommand{\sectionbreak}{\clearpage}
+\titleformat{\subsection}{\Large}{\Alph{subsection})}{0zw}{}

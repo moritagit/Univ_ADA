@@ -1,0 +1,69 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+線形モデル
+\begin{equation}
+	f_{\bm{\theta}}(\bm{x})
+		= \sum_{j=1}^{b} \theta_j \phi_j (\bm{x})
+		= \bm{\phi}(\bm{x})^\mathrm{T} \bm{\theta}
+\end{equation}
+に対して，重み付き最小二乗法を考える。
+ここで，
+\begin{align}
+	& \bm{\theta} =
+		\begin{bmatrix}
+			\theta_1 & \cdots & \theta_b
+		\end{bmatrix}^\mathrm{T} \\
+	& \bm{\phi}(\bm{x}) =
+		\begin{bmatrix}
+			\phi_1 (\bm{x}) & \cdots & \phi_b (\bm{x})
+		\end{bmatrix}^\mathrm{T}
+\end{align}
+である。
+このとき，損失関数は以下のように表される。
+\begin{align}
+	J(\bm{\theta})
+		& = \frac{1}{2} \sum_{i=1}^{n} \tilde{w}_i \qty(f_{\bm{\theta}}(\bm{x}_i) - y_i)^2 \\
+		& = \frac{1}{2} \sum_{i=1}^{n} \tilde{w}_i \qty(\bm{\phi}(\bm{x}_i)^\mathrm{T} \bm{\theta} - y_i)^2 \\
+		& = \frac{1}{2} \sum_{i=1}^{n} \qty(\bm{\phi}(\bm{x}_i)^\mathrm{T} \bm{\theta} - y_i) \tilde{w}_i \qty(\bm{\phi}(\bm{x}_i)^\mathrm{T} \bm{\theta} - y_i) \\
+		& = \frac{1}{2} (\bm{\Phi}\bm{\theta} - \bm{y})^\mathrm{T} \tilde{\bm{W}} (\bm{\Phi}\bm{\theta} - \bm{y}) \\
+		& = \frac{1}{2} (\bm{\theta}^\mathrm{T} \bm{\Phi}^\mathrm{T} - \bm{y}^\mathrm{T}) \tilde{\bm{W}} (\bm{\Phi}\bm{\theta} - \bm{y}) \\
+		& = \frac{1}{2} \qty{\bm{\theta}^\mathrm{T} \bm{\Phi}^\mathrm{T}\tilde{\bm{W}}\bm{\Phi}\bm{\theta} - \bm{\theta}^\mathrm{T} \bm{\Phi}^\mathrm{T} \tilde{\bm{W}}\bm{y} - \bm{y}^\mathrm{T}\tilde{\bm{W}}\bm{\Phi}\bm{\theta} + \bm{y}^\mathrm{T} \tilde{\bm{W}} \bm{y}}
+\end{align}
+ここで，
+\begin{align}
+	& \bm{\Phi} =
+		\begin{bmatrix}
+			\phi_1 (\bm{x}_1) & \cdots & \phi_b (\bm{x}_1) \\
+			\vdots & \ddots & \vdots \\
+			\phi_1 (\bm{x}_n) & \cdots & \phi_b (\bm{x}_n) \\
+		\end{bmatrix} \\
+	& \bm{y} =
+		\begin{bmatrix}
+			y_1 & \cdots & y_n
+		\end{bmatrix}^\mathrm{T} \\
+	& \tilde{\bm{W}} = \mathrm{diag}\qty{\tilde{w}_1,\ \cdots,\ \tilde{w}_n}
+\end{align}
+である。
+また，\(\bm{y}^\mathrm{T}\tilde{\bm{W}}\bm{\Phi}\bm{\theta}\)はスカラーであるから転置しても値は変わらず，
+\(\tilde{\bm{W}}\)は対称行列であるので転置しても\(\tilde{\bm{W}}\)のままであることに注意すると，
+結局，損失関数は次のように表される。
+\begin{equation}
+	J(\bm{\theta}) = \frac{1}{2} \bm{\theta}^\mathrm{T} \bm{\Phi}^\mathrm{T}\tilde{\bm{W}}\bm{\Phi}\bm{\theta} - \bm{\theta}^\mathrm{T} \bm{\Phi}^\mathrm{T} \tilde{\bm{W}}\bm{y} + \frac{1}{2} \bm{y}^\mathrm{T} \tilde{\bm{W}} \bm{y}
+\end{equation}
+これを\(\bm{\theta}\)で偏微分すると，
+\begin{equation}
+	\pdv{J(\bm{\theta})}{\bm{\theta}} = \bm{\Phi}^\mathrm{T}\tilde{\bm{W}}\bm{\Phi}\bm{\theta} - \bm{\Phi}^\mathrm{T} \tilde{\bm{W}}\bm{y}
+\end{equation}
+となる。
+これを\(\bm{0}\)とするような\(\bm{\theta}\)が\(J\)に最小を与えるので，
+\(\bm{\Phi}^\mathrm{T}\tilde{\bm{W}}\bm{\Phi}\)の逆行列が存在することを仮定すると，
+\begin{equation}
+	\hat{\bm{\theta}} = \qty(\bm{\Phi}^\mathrm{T}\tilde{\bm{W}}\bm{\Phi})^{-1} \bm{\Phi}^\mathrm{T} \tilde{\bm{W}}\bm{y}
+\end{equation}
+となる。
+
+
+\end{document}

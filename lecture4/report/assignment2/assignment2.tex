@@ -1,0 +1,41 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+微分可能で対称な損失\(\rho(r)\)に対して\(\tilde{r}\)で接する二次上界は，
+（存在するなら）次式で与えられることを示す。
+\begin{equation}
+    \tilde{\rho}(r) = \frac{\tilde{w}}{2} r^2 + \mathrm{Const.}
+    \qquad \qty(\tilde{w} = \frac{\rho^\prime (\tilde{r})}{\tilde{r}})
+\end{equation}
+
+微分可能で対称な損失\(\rho(r)\)に対して\(\tilde{r}\)で接する二次上界を，
+\begin{equation}
+    \tilde{\rho}(r) = ar^2 + br + c
+\end{equation}
+とおく。
+\(\rho(r)\)は対称より，\(b = 0\)がわかる。
+このとき，\(\tilde{\rho}(r)\)は\(\rho(r)\)に\(\tilde{r}\)で接するので，
+自身の値及び1階微分の値が\(\tilde{r}\)で一致する。
+したがって，
+\begin{align}
+    & \tilde{\rho}(\tilde{r}) = a{\tilde{r}}^2 + c = \rho(\tilde{r}) \\
+    & \tilde{\rho}^\prime (\tilde{r}) = 2a\tilde{r} = \rho^\prime (\tilde{r})
+\end{align}
+これを解くと，
+\begin{align}
+    & a = \frac{\rho^\prime (\tilde{r})}{2 \tilde{r}} \\
+    & c = \rho(\tilde{r}) - \frac{\rho^\prime (\tilde{r})}{2} \tilde{r}
+\end{align}
+となるので，結局，
+\begin{align}
+    \tilde{\rho}(r)
+        & = \frac{\rho^\prime (\tilde{r})}{2 \tilde{r}} r + \qty(\rho(\tilde{r}) - \frac{\rho^\prime (\tilde{r})}{2} \tilde{r}) \\
+        & = \frac{\tilde{w}}{2} r^2 + \mathrm{Const.}
+            \qquad \qty(\tilde{w} = \frac{\rho^\prime (\tilde{r})}{\tilde{r}})
+\end{align}
+と表せることがわかる。
+
+
+\end{document}

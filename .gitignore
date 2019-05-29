@@ -1,0 +1,26 @@
+# make white list
+
+lecture*/*
+!lecture*/
+!lecture*/report/
+lecture*/report/data/*
+
+
+# ignore
+
+# VS Code
+.vscode
+
+# Python
+.python-version
+*.swp
+*.pyc
+__pycache__
+.ipynb_checkpoints/
+
+# TeX
+*.aux
+*.dvi
+*.log
+*.out
+*.gz

@@ -1,0 +1,98 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+線形モデル\(f_{\bm{\theta}} (\bm{x}) = \sum_{j=1}^b \theta_j \phi_j (\bm{x})\)を用いたL2正則化回帰に，
+一つ抜き交差確認法を適用したときの二乗誤差\(L\)が次式のように表されることを示す。
+\begin{align}
+    & L = \frac{1}{n} ||\tilde{\bm{H}}^{-1} \bm{H} \bm{y}||^2 \\
+    & \bm{H} = \bm{I} - \bm{\Phi} (\bm{\Phi}^\mathrm{T} \bm{\Phi} + \lambda \bm{I})^{-1} \bm{\Phi}^\mathrm{T} \\
+    & \tilde{\bm{H}} : \text{\(\bm{H}\)と同じ対角成分を持ち，非対角成分は0}
+\end{align}
+
+訓練誤差\(L_\mathrm{train}\)は，
+\begin{align}
+    L_\mathrm{train} = ||\bm{\Phi \theta} - \bm{y} ||^2 + \frac{\lambda}{2} ||\bm{\theta}||^2
+\end{align}
+これを最小にする\(\bm{\theta}\)は，
+上式の\(\bm{\theta}\)による偏微分が0である条件から得られて，
+\begin{equation}
+    \hat{\bm{\theta}} = (\bm{\Phi}^\mathrm{T} \bm{\Phi} + \lambda \bm{I})^{-1} \bm{\Phi}^\mathrm{T} \bm{y}
+\end{equation}
+となる。
+これより，標本\((\bm{x}_i,\ y_i)\)を除いた標本群を用いて学習したときに得られるパラメータ\(\bm{\theta}\)は，
+\begin{align}
+    \hat{\bm{\theta}}_i
+        & = (\bm{\Phi}_i^\mathrm{T} \bm{\Phi}_i + \lambda \bm{I})^{-1} \bm{\Phi}_i^\mathrm{T} \bm{y}_i \\
+        & = (\bm{\Phi}^\mathrm{T} \bm{\Phi} + \lambda \bm{I} - \bm{\phi}_i \bm{\phi}_i^\mathrm{T})^{-1} (\bm{\Phi}^\mathrm{T} \bm{y} - \bm{\phi}_i y_i) \\
+        & = (\bm{U} - \bm{\phi}_i \bm{\phi}_i^\mathrm{T})^{-1} (\bm{\Phi}^\mathrm{T} \bm{y} - \bm{\phi}_i y_i)
+\end{align}
+と表される。ここで，
+\begin{equation}
+    \bm{U} = \bm{\Phi}^\mathrm{T} \bm{\Phi} + \lambda \bm{I}
+\end{equation}
+とおいた。
+また，ShermanMorrison-Woodbury公式を用いると，
+\begin{equation}
+    (\bm{U} - \bm{\phi}_i \bm{\phi}_i^\mathrm{T})^{-1}
+    =
+    \bm{U}^{-1} + \frac{\bm{U}^{-1} \bm{\phi}_i \bm{\phi}_i^\mathrm{T} \bm{U}^{-1}}{1 - \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\phi}_i}
+\end{equation}
+となることから，結局，
+\begin{equation}
+    \hat{\bm{\theta}}_i = \qty(\bm{U}^{-1} + \frac{\bm{U}^{-1} \bm{\phi}_i \bm{\phi}_i^\mathrm{T} \bm{U}^{-1}}{1 - \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\phi}_i}) (\bm{\Phi}^\mathrm{T} \bm{y} - \bm{\phi}_i y_i)
+\end{equation}
+これより，\(\alpha_i = \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\phi}_i\)とおくと，
+\(y_i\)の予測値\(\hat{y}_i\)は，
+\begin{align}
+    \hat{y}_i
+        & = \bm{\phi}_i^\mathrm{T} \hat{\bm{\theta}}_i \\
+        & = \bm{\phi}_i^\mathrm{T} \qty(\bm{U}^{-1} + \frac{\bm{U}^{-1} \bm{\phi}_i \bm{\phi}_i^\mathrm{T} \bm{U}^{-1}}{1 - \alpha_i}) (\bm{\Phi}^\mathrm{T} \bm{y} - \bm{\phi}_i y_i) \\
+        & = \frac{1}{1 - \alpha_i} \qty( \bm{\phi}_i^\mathrm{T} (1 - \alpha_i) \bm{U}^{-1} + \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\phi}_i \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} ) (\bm{\Phi}^\mathrm{T} \bm{y} - \bm{\phi}_i y_i) \\
+        & = \frac{1}{1 - \alpha_i} \qty( \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} - \alpha_i \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} + \alpha_i \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} ) (\bm{\Phi}^\mathrm{T} \bm{y} - \bm{\phi}_i y_i) \\
+        & = \frac{\bm{\phi}_i^\mathrm{T} \bm{U}^{-1}}{1 - \alpha_i} (\bm{\Phi}^\mathrm{T} \bm{y} - \bm{\phi}_i y_i) \\
+        & = \frac{\bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\Phi}^\mathrm{T} \bm{y} - \alpha_i y_i}{1 - \alpha_i}
+\end{align}
+よって，テスト誤差\(L\)は，
+\begin{align}
+    L
+        & = \frac{1}{n} \sum_{i=1}^n (\hat{y}_i - y_i)^2 \\
+        & = \frac{1}{n} \sum_{i=1}^n \qty(\frac{\bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\Phi}^\mathrm{T} \bm{y} - \alpha_i y_i}{1 - \alpha_i} - y_i) \\
+        & = \frac{1}{n} \sum_{i=1}^n \qty(\frac{\bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\Phi}^\mathrm{T} \bm{y} - y_i}{1 - \alpha_i})
+\end{align}
+となる。
+
+また，\(\bm{H}\)と\(\tilde{\bm{H}}\)について，
+\begin{align}
+    \bm{H}
+        & = \bm{I} - \bm{\Phi} (\bm{\Phi}^\mathrm{T} \bm{\Phi} + \lambda \bm{I})^{-1} \bm{\Phi}^\mathrm{T} \\
+        & = \bm{I} - \bm{\Phi} \bm{U}^{-1} \bm{\Phi}^\mathrm{T} \\
+        & = \bm{I} -
+            \begin{bmatrix}
+                \bm{\phi}_1^\mathrm{T} \bm{U}^{-1} \bm{\phi}_1 & \cdots & \bm{\phi}_1^\mathrm{T} \bm{U}^{-1} \bm{\phi}_n \\
+                \vdots & \ddots & \vdots \\
+                \bm{\phi}_n^\mathrm{T} \bm{U}^{-1} \bm{\phi}_1 & \cdots & \bm{\phi}_n^\mathrm{T} \bm{U}^{-1} \bm{\phi}_n \\
+            \end{bmatrix}
+\end{align}
+より，\(\bm{H}\)（及び\(\tilde{\bm{H}}\)）の\(i\)番目対角成分は\(1 - \alpha_i\)，
+\(\tilde{\bm{H}}^{-1}\)の\(i\)番目対角成分は\(1/(1 - \alpha_i)\)となる。
+また，
+\begin{align}
+    \bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\Phi}^\mathrm{T} \bm{y} - y_i
+        & = \sum_{j=1}^{n} \qty(\bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\phi}_j y_j) - y_i \\
+        & = -(\bm{Hy})_i
+\end{align}
+である。
+以上より，テスト誤差は，
+\begin{align}
+    L
+        & = \frac{1}{n} \sum_{i=1}^n \qty(\frac{\bm{\phi}_i^\mathrm{T} \bm{U}^{-1} \bm{\Phi}^\mathrm{T} \bm{y} - y_i}{1 - \alpha_i}) \\
+        & = \frac{1}{n} \sum_{i=1}^n \qty(\frac{-(\bm{Hy})_i}{1 - \alpha_i})^2 \\
+        & = \frac{1}{n} \sum_{i=1}^n \qty(\tilde{\bm{H}}_i^{-1} (\bm{Hy})_i)^2 \\
+        & = \frac{1}{n} \sum_{i=1}^n \qty(\tilde{\bm{H}}^{-1} \bm{Hy})_i^2 \\
+        & = \frac{1}{n} ||\tilde{\bm{H}}^{-1} \bm{Hy}||^2
+\end{align}
+となる。
+
+\end{document}

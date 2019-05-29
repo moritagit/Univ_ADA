@@ -1,0 +1,116 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+サポートベクトルマシンの双対最適化問題の相補性条件は次のようになる。
+\begin{align}
+    & \alpha_i \qty(y_i \bm{w}^\mathrm{T} \bm{x}_i - 1 + \xi_i) = 0
+        \label{eq:SVM_dual_comple_1} \\
+    & \beta_i \xi_i = 0
+    \label{eq:SVM_dual_comple_2}
+\end{align}
+ここで，ソフトマージンを採用すると次式が成り立つ。
+\begin{align}
+    & y_i \bm{w}^\mathrm{T}\bm{x}_i \ge 1 - \xi_i \notag \\
+    & \Leftrightarrow y_i \bm{w}^\mathrm{T}\bm{x}_i - 1 + \xi_i \ge 0
+        \label{eq:soft_margin} \\
+    & \xi_i \ge 0
+        \label{eq:margin}
+\end{align}
+また，サポートベクトルマシンのラグランジュ関数の\(\xi_i\)による微分が\(0\)となることから，
+\begin{equation}
+    \alpha_i + \beta_i = C
+        \label{eq:del_Lagrange_xi}
+\end{equation}
+である。
+
+以下では，\(\alpha_i\)と\(y_i \bm{w}^\mathrm{T}\bm{x}_i\)の値それぞれについて場合分けをし，
+各場合でのもう一方の値（の範囲）を求める。
+
+
+
+\subsection*{1. \(\alpha_i = 0\)のとき}
+
+式(\ref{eq:del_Lagrange_xi})より，
+\begin{equation*}
+    \beta_i = C
+\end{equation*}
+式(\ref{eq:SVM_dual_comple_2})より，
+\begin{equation*}
+    \xi_i = 0
+\end{equation*}
+式(\ref{eq:soft_margin})より，
+\begin{equation}
+    y_i \bm{w}^\mathrm{T}\bm{x}_i \ge 1
+\end{equation}
+
+
+
+\subsection*{2. \(0 < \alpha_i < C\)のとき}
+
+式(\ref{eq:del_Lagrange_xi})より，
+\begin{equation*}
+    \beta_i \neq 0
+\end{equation*}
+式(\ref{eq:SVM_dual_comple_2})より，
+\begin{equation*}
+    \xi_i = 0
+\end{equation*}
+式(\ref{eq:SVM_dual_comple_1})より，
+\(\alpha_i \neq 0\)に注意して，
+\begin{equation}
+    y_i \bm{w}^\mathrm{T}\bm{x}_i = 1
+\end{equation}
+
+
+
+\subsection*{3. \(\alpha_i = C\)のとき}
+
+式(\ref{eq:del_Lagrange_xi})より，
+\begin{equation*}
+    \beta_i = 0
+\end{equation*}
+これと式(\ref{eq:SVM_dual_comple_2})より，
+\(\xi_i = 0\)である必要はないことが確認される。
+式(\ref{eq:SVM_dual_comple_1})及び式(\ref{eq:margin})より，
+\(\alpha_i \neq 0\)に注意して，
+\begin{equation}
+    y_i \bm{w}^\mathrm{T}\bm{x}_i = 1 - \xi_i \le 1
+\end{equation}
+
+
+
+\subsection*{4. \(y_i \bm{w}^\mathrm{T}\bm{x}_i > 1\)のとき}
+
+式(\ref{eq:margin})より，
+\begin{align*}
+    & y_i \bm{w}^\mathrm{T}\bm{x}_i > 1 \ge 1 - \xi_i \\
+    & y_i \bm{w}^\mathrm{T}\bm{x}_i - 1 + \xi_i > 0
+\end{align*}
+式(\ref{eq:SVM_dual_comple_1})より，
+\begin{equation}
+    \alpha_i = 0
+\end{equation}
+
+
+
+\subsection*{5. \(y_i \bm{w}^\mathrm{T}\bm{x}_i < 1\)のとき}
+
+式(\ref{eq:soft_margin})より，
+\begin{align*}
+    & \xi_i \ge 1 - y_i \bm{w}^\mathrm{T}\bm{x}_i > 0 \\
+    & \xi_i > 0
+\end{align*}
+式(\ref{eq:SVM_dual_comple_2})より，
+\begin{equation*}
+    \beta_i = 0
+\end{equation*}
+式(\ref{eq:del_Lagrange_xi})より，
+\begin{equation}
+    \alpha_i = C
+\end{equation}
+
+
+
+\end{document}

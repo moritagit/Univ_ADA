@@ -1,0 +1,109 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+線形モデル
+\begin{equation}
+	f_{\bm{\theta}}(\bm{x}) = \bm{\theta}^\mathrm{T} \bm{x}
+\end{equation}
+を用いた最小二乗分類を考える。
+いま，訓練標本の平均\(\bm{\mu}\)について次式が成立する。
+\begin{equation}
+	\bm{\mu} = \frac{1}{n} \sum_{i=1}^{n} \bm{x}_i = \bm{0}
+\end{equation}
+また，最小二乗誤差は，
+\begin{align}
+	L(\bm{\theta})
+		& = \frac{1}{2} \sum_{i=1}^{n} \qty(f_{\bm{\theta}}(\bm{x}) - y_i)^2 \\
+		& = \frac{1}{2} ||\bm{X} \bm{\theta} - \bm{y}||^2
+\end{align}
+と表されるので，これの\(\bm{\theta}\)による偏微分が\(\bm{0}\)になる条件から，
+\begin{equation}
+	(\bm{X}^\mathrm{T} \bm{X}) \hat{\bm{\theta}} = \bm{X}^\mathrm{T} \bm{y}
+	\label{eq:theta_opt}
+\end{equation}
+が成立する。
+ここで，
+\begin{align}
+	& \bm{X} =
+		\begin{bmatrix}
+			\bm{x}_1 & \cdots & \bm{x}_n
+		\end{bmatrix}^\mathrm{T} \\
+	& \bm{y} =
+		\begin{bmatrix}
+			y_1 & \cdots & y_n
+		\end{bmatrix}^\mathrm{T}
+\end{align}
+である。
+
+いま，正例を下付きの\(+\)で，負例を下付きの\(-\)で表すこととすると，
+次が成立する。
+\begin{align}
+	& n = n_+ + n_- \\
+	& \bm{\mu}_+ = \frac{1}{n_+} \sum_{\bm{x}_i \in D_+} x_i \\
+	& \bm{\mu}_- = \frac{1}{n_-} \sum_{\bm{x}_i \in D_-} x_i \\
+\end{align}
+全標本の和を考えると，
+\begin{align}
+	& \sum_{i=1}^{n} x_i = \sum_{\bm{x}_i \in D_+} x_i + \sum_{\bm{x}_i \in D_-} x_i \\
+	& n \bm{\mu} = n_+ \bm{\mu}_+ + n_- \bm{\mu}_- = \bm{0} \\
+	& \bm{\mu}_- = - \frac{n_+}{n_-} \bm{\mu}_+
+\end{align}
+が得られる。
+
+また，二値分類問題を考えているので，
+\(y\)は正例のとき1，負例のとき\(-1\)となる。
+このことから，
+\begin{align}
+	\bm{X}^\mathrm{T} \bm{y}
+		& = \sum_{\bm{x}_i \in D_+} x_i - \sum_{\bm{x}_i \in D_-} x_i \\
+		& = n_+ \bm{\mu}_+ - n_- \bm{\mu}_- \\
+		& = 2 n_+ \bm{\mu}_+
+	\label{eq:XTy}
+\end{align}
+を得る。
+
+また，平均\(\bm{\mu} = \bm{0}\)より，
+標本の共分散行列の推定値は次で表される。
+\begin{equation}
+	\hat{\bm{\Sigma}}
+		= \frac{1}{n} \sum_{i=1}^{n} (\bm{x}_i - \bm{\mu}) (\bm{x}_i - \bm{\mu})^\mathrm{T}
+		= \frac{1}{n} \sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T}
+\end{equation}
+これを用いると，次が成立する。
+\begin{align}
+	\bm{X}^\mathrm{T} \bm{X}
+		& =
+			\begin{bmatrix}
+				\bm{x}_1 & \cdots & \bm{x}_n
+			\end{bmatrix}
+			\begin{bmatrix}
+				\bm{x}_1^\mathrm{T} \\ \vdots \\ \bm{x}_n^\mathrm{T}
+			\end{bmatrix} \\
+		& = \sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T} \\
+		& = n \hat{\bm{\Sigma}}
+	\label{eq:XTX}
+\end{align}
+
+以上，式(\ref{eq:theta_opt})，(\ref{eq:XTy})，(\ref{eq:XTX})より，
+\begin{align}
+	& n \hat{\bm{\Sigma}} \hat{\bm{\theta}} = 2 n_+ \bm{\mu}_+ \\
+	& \hat{\bm{\theta}} = \frac{2 n_+}{n} \hat{\bm{\Sigma}}^{-1} \bm{\mu}_+
+	\label{eq:boundary_LS}
+\end{align}
+を得る。
+一方，フィッシャー判別分析による境界の垂線方向は，
+\begin{align}
+	\hat{\bm{\Sigma}} (\bm{\mu}_+ - \bm{\mu}_-)
+		& = \hat{\bm{\Sigma}} \qty(1 + \frac{n_+}{n_-}) \bm{\mu}_+ \\
+		& = \frac{n}{n_-} \hat{\bm{\Sigma}} \bm{\mu}_+
+	\label{eq:boundary_Fisher}
+\end{align}
+となる。
+式(\ref{eq:boundary_LS})，(\ref{eq:boundary_Fisher})から，
+最小二乗分類により得られる識別境界の垂線\(\hat{\bm{\theta}}\)は，
+フィッシャー判別分析による境界の垂線\(\hat{\bm{\Sigma}} (\bm{\mu}_+ - \bm{\mu}_-)\)と同じ方向になる。
+
+
+\end{document}

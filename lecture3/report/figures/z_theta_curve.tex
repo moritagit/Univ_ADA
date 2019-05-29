@@ -1,0 +1,39 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\begin{tikzpicture}
+
+% coordinates
+\coordinate (O) at (0, 0);
+\fill (O) node[below left]{O} circle [radius=1mm];
+
+
+% axis
+\begin{scope}
+    \draw [-latex] (O)--+(3, 0)node[right]{\(\theta + u\)};
+    \draw (O)--+(-3, 0);
+    \draw [-latex] (O)--+(0, 3)node[right]{\(z\)};
+    \draw (O)--+(0, -2);
+\end{scope}
+
+
+% graph
+\begin{scope}[ultra thick]
+    \draw (O)
+        to (1, 0) node[below]{\(\lambda\)}
+        to (3, 2);
+    \draw (O)
+        to (-1, 0) node[above]{\(-\lambda\)}
+        to (-3, -2);
+\end{scope}
+
+\begin{scope}[densely dashed]
+    \draw (1, 0) to (0, -1) node[left]{\(-\lambda\)};
+    \draw (-1, 0) to (0, 1) node[right]{\(\lambda\)};
+\end{scope}
+\node [above right] at (0, 0) {};
+
+
+
+\end{tikzpicture}
+\end{document}

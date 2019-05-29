@@ -1,0 +1,40 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+\(B_{\tau} (y)\)を再帰的に表現する。
+\begin{align}
+    B_{\tau} (y)
+        & =
+            \sum_{ y^{(\tau + 1)}, \ldots , y^\mathrm{(m)} = 1 }^{c}
+            \exp(
+                \sum_{k=\tau + 2}^{m} \bm{\zeta}^\mathrm{T} \bm{\varphi}_i^{(k)} \qty(y^{(k)},\ y^{(k-1)})
+                + \bm{\zeta}^\mathrm{T} \bm{\varphi}_i^{(\tau + 1)} \qty(y^{(\tau + 1)},\ y)
+                ) \\
+        & =
+            \sum_{y^(\tau + 1) = 1}^{c} \cdot \sum_{ y^{(\tau + 2)}, \ldots , y^\mathrm{(m)} = 1 }^{c}
+            \exp{\sum_{k=\tau + 2}^{m} \bm{\zeta}^\mathrm{T} \bm{\varphi}_i^{(k)} \qty(y^{(k)},\ y^{(k-1)})}
+            \exp(\bm{\zeta}^\mathrm{T} \bm{\varphi}_i^{(\tau + 1)} \qty(y^{(\tau + 1)},\ y))
+\end{align}
+ここで，
+\begin{align}
+    & \sum_{ y^{(\tau + 2)}, \ldots , y^\mathrm{(m)} = 1 }^{c}
+        \exp{\sum_{k=\tau + 2}^{m} \bm{\zeta}^\mathrm{T} \bm{\varphi}_i^{(k)} \qty(y^{(k)},\ y^{(k-1)})} \notag \\
+    & \ \qquad =
+        \sum_{ y^{(\tau + 2)}, \ldots , y^\mathrm{(m)} = 1 }^{c}
+            \exp{
+                \sum_{k=\tau + 3}^{m} \bm{\zeta}^\mathrm{T} \bm{\varphi}_i^{(k)} \qty(y^{(k)},\ y^{(k-1)})
+                + \bm{\zeta}^\mathrm{T} \bm{\varphi}_i^{(\tau + 2)} \qty(y^{(\tau + 2)},\ y^{(\tau + 1)})
+                } \\
+    & \ \qquad =
+        B_{\tau + 1}\qty(y^{(\tau + 1)})
+\end{align}
+となるから，結局\(B_{\tau} (y)\)は，
+\begin{equation}
+    B_{\tau} (y) = \sum_{y^(\tau + 1) = 1}^{c} B_{\tau + 1}\qty(y^{(\tau + 1)}) \exp(\bm{\zeta}^\mathrm{T} \bm{\varphi}_i^{(\tau + 1)} \qty(y^{(\tau + 1)},\ y))
+\end{equation}
+という形で再帰表現される。
+
+
+\end{document}

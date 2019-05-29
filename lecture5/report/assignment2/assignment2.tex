@@ -1,0 +1,61 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+MNISTの手書き数字分類を，ガウスカーネルモデルに対する最小二乗回帰（一対他法）を用いて行う。
+訓練標本には各500文字ずつ計5,000文字，
+テスト標本には各200文字ずつ計2,000文字が含まれている。
+
+プログラムは\pageref{listing:assignment2}ページのListing \ref{listing:assignment2}に示した。
+以下に結果を示す。混同行列は表\ref{tab:confusion_matrix}のようになり，
+各カテゴリごとの正解率等は表\ref{tab:result}のようになった。
+
+ここで，ガウスカーネルのバンド幅\(h\)とL2正則化項の係数\(\lambda\)は次のようにした。
+\begin{align}
+    & h = 1.0 \\
+    & \lambda = \num{1e-4}
+\end{align}
+
+\begin{table}[H]
+	\centering
+	\caption{混同行列}
+	\begin{tabular}{|c||cccccccccc|} \hline
+			& 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ \hline\hline
+		0     & 198 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		1     & 0 & 200 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		2     & 0 & 0 & 193 & 1 & 0 & 0 & 0 & 2 & 3 & 1 \\
+		3     & 0 & 0 & 0 & 192 & 0 & 3 & 0 & 2 & 2 & 1 \\
+		4     & 0 & 5 & 0 & 0 & 184 & 1 & 3 & 0 & 0 & 7 \\
+		5     & 2 & 0 & 3 & 4 & 0 & 187 & 0 & 1 & 1 & 2 \\
+		6     & 1 & 0 & 2 & 0 & 0 & 2 & 195 & 0 & 0 & 0 \\
+		7     & 0 & 1 & 0 & 0 & 3 & 0 & 0 & 191 & 1 & 4 \\
+		8     & 3 & 2 & 1 & 4 & 0 & 3 & 0 & 0 & 185 & 2 \\
+		9     & 0 & 1 & 0 & 0 & 2 & 0 & 0 & 2 & 0 & 195 \\
+		\hline
+	\end{tabular}
+	\label{tab:confusion_matrix}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\caption{テストデータに対する各カテゴリごとの結果}
+	\begin{tabular}{lrrr}
+		Category & \# Data & \# Correct & Accuracy \\ \hline
+		0 & 200 & 198 & 0.990 \\
+		1 & 200 & 200 & 1.000 \\
+		2 & 200 & 193 & 0.965 \\
+		3 & 200 & 192 & 0.960 \\
+		4 & 200 & 184 & 0.920 \\
+		5 & 200 & 187 & 0.935 \\
+		6 & 200 & 195 & 0.975 \\
+		7 & 200 & 191 & 0.955 \\
+		8 & 200 & 185 & 0.925 \\
+		9 & 200 & 195 & 0.975 \\
+		All & 2,000 & 1,920 & 0.960
+	\end{tabular}
+	\label{tab:result}
+\end{table}
+
+
+\end{document}

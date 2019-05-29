@@ -1,0 +1,181 @@
+\documentclass[dvipdfmx, fleqn, titlepage]{jsarticle}
+\input{../../preamble}
+\title{
+	先端データ解析論 \\
+	第１回　レポート
+	}
+\begin{document}
+\maketitle
+
+\section{}
+
+$X$を確率と統計の授業が好きであるという事象とし，
+$X = 1$が好き，$X = 0$が嫌いとする。
+また，$Y$を授業中に眠たいという事象とし，
+$Y = 1$が眠たい，$Y = 0$が眠たくないとする。
+このとき，与えられた条件より，
+\begin{align*}
+    & p(X=1) = 0.8 \quad p(X=0) = 0.2 \\
+    & p(Y=1\ |\ X=1) = 0.25 \quad p(Y=1\ |\ X=0) = 0.25
+\end{align*}
+となる。
+
+
+\subsection{}
+\begin{align*}
+    p(X=\text{好},\ Y=\text{眠})
+    & = p(X=1,\ Y=1) \\
+    & = p(Y=1\ |\ X=1) \cdot p(X=1) \\
+    & = \num{0.25 x 0.8} \\
+    & = 0.2
+\end{align*}
+
+
+\subsection{}
+\begin{align*}
+	p(Y=\text{眠})
+	& = p(Y=1) \\
+	& = p(Y=1\ |\ X=1) \cdot p(X=1) + p(Y=1\ |\ X=0) \cdot p(X=0) \\
+	& = \num{0.25 x 0.8} + \num{0.25 x 0.2} \\
+	& = 0.25
+\end{align*}
+
+
+\subsection{}
+\begin{align*}
+    p(X=\text{好}\ |\ Y=\text{眠})
+    & = p(X=1\ |\ Y=1) \\
+    & = \frac{p(X=1,\ Y=1)}{p(Y=1)} \\
+    & = \frac{0.2}{0.25} \\
+    & = 0.8
+\end{align*}
+
+
+\subsection{}
+\begin{align*}
+	& p(X=1,\ Y=1) = 0.2 \\
+	& p(X=1) \cdot p(Y=1) = \num{0.8 x 0.25} = 0.2
+\end{align*}
+から，
+\begin{equation*}
+	p(X=1,\ Y=1) = p(X=1) \cdot p(Y=1)
+\end{equation*}
+よって，$X$と$Y$は独立である。
+
+
+
+\newpage
+\section{}
+\subsection{}
+
+離散型について，$\sum_{x} p(x) = 1$から，
+\begin{align*}
+	E(c) = \sum_{x} cp(x) = c \cdot \sum_x p(x) = c
+\end{align*}
+
+連続型について，$\int p(x) \dd x = 1$から，
+\begin{align*}
+	E(c) = \int c p(x) \dd x = c \cdot \int p(x) \dd x = c
+\end{align*}
+
+
+\subsection{}
+
+離散型について，
+\begin{align*}
+	E(X+c)
+	& = \sum_{x} (x + c) p(x) \\
+	& = \sum_{x} x p(x) + \sum_{x} c p(x) \\
+	& = E(X) + E(c) \\
+	& = E(X) + c
+\end{align*}
+
+連続型について，
+\begin{align*}
+	E(X+c)
+	& = \int (x + c) p(x) \dd x \\
+	& = \int x p(x) \dd x + \int c p(x) \dd x \\
+	& = E(X) + E(c) \\
+	& = E(X) + c
+\end{align*}
+
+
+\subsection{}
+
+離散型について，
+\begin{align*}
+	E(cX) = \sum_x cx p(x) = c \cdot \sum_x x p(x) = c E(X)
+\end{align*}
+
+連続型について，
+\begin{align*}
+	E(cX) = \int cx p(x) \dd x = c \cdot \int x p(x) \dd x = c E(X)
+\end{align*}
+
+
+
+\section{}
+\subsection{}
+$E(c) = c$から，
+\begin{align*}
+	V(c) = E\qty((c - E(c))^2) = E(0) = 0
+\end{align*}
+
+
+\subsection{}
+\begin{align*}
+	V(X+c)
+	& = E\qty(\qty((X+c) - E(X+c))^2) \\
+	& = E\qty(\qty((X+c) - (E(X) + c))^2) \\
+	& = E\qty((X - E(X))^2) \\
+	& = V(X)
+\end{align*}
+
+
+\subsection{}
+$E(cX) = cE(X)$から，
+\begin{align*}
+	V(cX)
+	& = E\qty(\qty(cX - E(cX))^2) \\
+	& = E\qty(\qty(cX - cE(X))^2) \\
+	& = E\qty(c^2 \qty(X - E(X))^2) \\
+	& = c^2 E\qty(\qty(X - E(X))^2) \\
+	& = c^2 V(X)
+\end{align*}
+
+
+
+\section{}
+\subsection{}
+離散型について，
+\begin{align*}
+	E(X + X')
+	& = \sum_x \sum_{x'} (x + x') p(x,\ x') \\
+	& = \sum_x \sum_{x'} x p(x,\ x') + \sum_x \sum_{x'} x' p(x,\ x') \\
+	& = \sum_x x p(x) + \sum_{x'} x' p(x') \\
+	& = E(X) + E(X')
+\end{align*}
+
+連続型について，
+\begin{align*}
+	E(X + X')
+	& = \iint (x + x') p(x,\ x') \dd x \dd x' \\
+	& = \iint x p(x,\ x') \dd x \dd x' + \iint x' p(x,\ x') \dd x \dd x' \\
+	& = \int x p(x) \dd x + \int x' p(x') \dd x' \\
+	& = E(X) + E(X')
+\end{align*}
+
+
+\subsection{}
+\begin{align*}
+	V(X + X')
+	& = E\qty( \qty((X+X') - E(X+X'))^2 ) \\
+	& = E\qty( \qty((X+X') - (E(X)+E(X')))^2 ) \\
+	& = E\qty( \qty((X - E(X)) + (X' - E(X')))^2 ) \\
+	& = E\qty( (X - E(X))^2 + 2(X - E(X))(X' - E(X')) + (X' - E(X'))^2 ) \\
+	& = E\qty((X - E(X))^2) + 2 E\qty((X - E(X))(X' - E(X'))) + E\qty((X' - E(X'))^2) \\
+	& = V(X) + V(X') + 2\mathrm{Cov}(X,\ X')
+\end{align*}
+
+
+\end{document}
