@@ -23,16 +23,16 @@ def train(x, y, h, lamb, n_class):
     K = np.exp(-(x - x[:, None])**2 / (2*h**2))
     for label in range(n_class):
         pi_y = (y == label).astype(int)
-        theta[:, label] = np.linalg.inv(K.dot(K) + lamb*np.eye(len(K))).dot(K).dot(pi_y)
+        theta[:, label] = np.linalg.inv(K.T.dot(K) + lamb*np.eye(n_sample)).dot(K).dot(pi_y)
     return theta
 
 
 def visualize(x, y, theta, h, num=100, path=None):
     X = np.linspace(-5, 5, num=num)
-    K = np.exp(-(x - X[:, None]) ** 2 / (2 * h ** 2))
+    K = np.exp(-(x - X[:, None])**2 / (2*h**2))
     logit = K.dot(theta)
-    unnormalized_prob = np.exp(logit - np.max(logit, axis=1, keepdims=True))
-    prob = unnormalized_prob / unnormalized_prob.sum(1, keepdims=True)
+    unnormalized_prob = logit - logit.min(axis=1, keepdims=True)
+    prob = unnormalized_prob / unnormalized_prob.sum(axis=1, keepdims=True)
 
     plt.clf()
     plt.xlim(-5, 5)
@@ -62,7 +62,6 @@ def main():
 
     # load data
     x, y = generate_data(n_sample, n_class)
-    print(x.dtype)
     #print(x)
     #print(y)
 
