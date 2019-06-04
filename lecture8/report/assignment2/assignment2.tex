@@ -1,0 +1,47 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+二乗ヒンジ損失に基づく適応正則化分類を，
+線形モデル
+\begin{equation}
+    f_{\bm{\theta}} (\bm{x}) = \qty(x^{(1)}\ x^{(2)}\ 1) \bm{\theta}
+\end{equation}
+に対して実装する。
+
+損失は
+\begin{align}
+    J(\bm{\mu},\ \bm{\Sigma})
+        & = \qty(\max(0,\ 1 - \bm{\mu}^\mathrm{T} \phi(\bm{x}) y))^2
+            + \phi(\bm{x})^\mathrm{T} \bm{\Sigma} \phi(\bm{x})
+            \notag \\
+        & \ \qquad
+            + \gamma \qty{
+            \log\frac{\det(\tilde{\bm{\Sigma}})}{\det{\bm{\Sigma}}}
+            + \mathrm{tr}\qty(\tilde{\bm{\Sigma}}^{-1} \bm{\Sigma})
+            + (\bm{\mu} - \tilde{\bm{\mu}})^\mathrm{T} \tilde{\bm{\Sigma}}^{-1} (\bm{\mu} - \tilde{\bm{\mu}})
+            - d
+            }
+    \label{eq:loss}
+\end{align}
+と表され，パラメータの更新式は次のように表される。
+\begin{align}
+    & \bm{\mu} \leftarrow \bm{\mu} + \frac{y \max(0,\ 1 - \bm{\mu}^\mathrm{T} \phi(\bm{x}) y)}{\phi(\bm{x})^\mathrm{T} \bm{\Sigma} \phi(\bm{x}) + \gamma} \bm{\Sigma} \phi(\bm{x}) \\
+    & \bm{\Sigma} \leftarrow \bm{\Sigma} - \frac{\bm{\Sigma} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T} \bm{\Sigma}}{\phi(\bm{x})^\mathrm{T} \bm{\Sigma} \phi(\bm{x}) + \gamma}
+\end{align}
+
+
+
+以下の図\ref{fig:result}に示す。
+なお，プログラムは\pageref{listing:assignment2}ページのListing \ref{listing:assignment2}に示した。
+
+\begin{figure}[H]
+    \centering
+    %\includegraphics[clip, width=12cm]{../figures/assignment2_result}
+    \caption{結果}
+    \label{fig:result}
+\end{figure}
+
+
+\end{document}

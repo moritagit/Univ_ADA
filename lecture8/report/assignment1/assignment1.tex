@@ -1,0 +1,117 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+二乗ヒンジ損失に対する適応正則化分類の\(\bm{\mu}\)の解が次式で与えられることを示す。
+\begin{equation}
+    \hat{\bm{\mu}} = \tilde{\bm{\mu}} + \frac{y \max(0,\ 1 - \tilde{\bm{\mu}}^\mathrm{T} \phi(\bm{x}) y)}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma} \tilde{\bm{\Sigma}} \phi(\bm{x})
+    \label{eq:objective}
+\end{equation}
+
+損失は，
+\begin{align}
+    J(\bm{\mu},\ \bm{\Sigma})
+        & = \qty(\max(0,\ 1 - \bm{\mu}^\mathrm{T} \phi(\bm{x}) y))^2
+            + \phi(\bm{x})^\mathrm{T} \bm{\Sigma} \phi(\bm{x})
+            \notag \\
+        & \ \qquad
+            + \gamma \qty{
+            \log\frac{\det(\tilde{\bm{\Sigma}})}{\det{\bm{\Sigma}}}
+            + \mathrm{tr}\qty(\tilde{\bm{\Sigma}}^{-1} \bm{\Sigma})
+            + (\bm{\mu} - \tilde{\bm{\mu}})^\mathrm{T} \tilde{\bm{\Sigma}}^{-1} (\bm{\mu} - \tilde{\bm{\mu}})
+            - d
+            }
+    \label{eq:loss}
+\end{align}
+と表される。
+\(f\)の\(x\)による劣微分を\(\partial_x f\)などと表すと，
+この損失の\(\bm{\mu}\)による偏微分は，
+\begin{equation}
+    \pdv{J}{\bm{\mu}}
+        = 2 \cdot \max(0,\ 1 - \bm{\mu}^\mathrm{T} \phi(\bm{x}) y) \cdot \partial_{\bm{\mu}} \max(0,\ 1 - \bm{\mu}^\mathrm{T} \phi(\bm{x}) y)
+        + \gamma \qty(2 \tilde{\bm{\Sigma}}^{-1} \bm{\mu} - 2 \tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}})
+    \label{eq:deriv_loss}
+\end{equation}
+となる。
+\(z = \bm{\mu}^\mathrm{T} \phi(\bm{x}) y\)とおくと，
+\begin{equation}
+    \pdv{z}{\bm{\mu}} = y \phi(\bm{x})
+    \label{eq:z}
+\end{equation}
+であり，
+また，
+\begin{align}
+    & \max(0,\ 1 - z) =
+        \begin{cases}
+            1 - z & (z < 1) \\
+            0 & (z \ge 1) \\
+        \end{cases}
+        \label{eq:max_z} \\
+    & \partial_{\bm{\mu}} \max(0,\ 1 - z) =
+        \begin{cases}
+            - y \phi(\bm{x}) & (z < 1) \\
+            \bm{0} & (z > 1) \\
+            \qty[- y \phi(\bm{x}),\ \bm{0}] & (z = 1)
+        \end{cases}
+        \label{eq:subgrad_z} \\
+\end{align}
+である。
+
+\(z > 1\)のとき，式(\ref{eq:deriv_loss}) -- (\ref{eq:subgrad_z})から，
+\begin{equation}
+    \pdv{J}{\bm{\mu}}
+        = 2 \gamma \qty(\tilde{\bm{\Sigma}}^{-1} \bm{\mu} - \tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}})
+        = \bm{0}
+\end{equation}
+よって，
+\begin{equation}
+    \hat{\bm{\mu}} = \tilde{\bm{\mu}}
+    \label{eq:mu_hat_z_qt_1}
+\end{equation}
+
+\(z < 1\)のとき，式(\ref{eq:deriv_loss}) -- (\ref{eq:subgrad_z})から，
+\begin{equation}
+    \pdv{J}{\bm{\mu}}
+        = 2 (1 - \bm{\mu}^\mathrm{T} \phi(\bm{x}) y) (- y \phi(\bm{x})) + 2 \gamma \qty(\tilde{\bm{\Sigma}}^{-1} \bm{\mu} - \tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}})
+        = \bm{0}
+\end{equation}
+\(\bm{\mu}^\mathrm{T} \phi(\bm{x})\)はスカラーなので転置しても値は変わらないことから，
+\begin{align}
+    & (- y \phi(\bm{x})) (1 - y \phi(\bm{x})^\mathrm{T} \bm{\mu}) + \gamma \qty(\tilde{\bm{\Sigma}}^{-1} \bm{\mu} - \tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}})
+    = \bm{0} \\
+    & y^2 \phi(\bm{x}) \phi(\bm{x})^\mathrm{T} \bm{\mu} - y \phi(\bm{x}) + \gamma \tilde{\bm{\Sigma}}^{-1} \bm{\mu} - \gamma \tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}} = \bm{0} \\
+    & \qty(\gamma \tilde{\bm{\Sigma}}^{-1} + y^2 \phi(\bm{x}) \phi(\bm{x})^\mathrm{T}) \bm{\mu} = \gamma \tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}} + y \phi(\bm{x}) \\
+    & \qty(\tilde{\bm{\Sigma}}^{-1} + \frac{y^2}{\gamma} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T}) \bm{\mu} = \tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}} + \frac{y}{\gamma} \phi(\bm{x})
+\end{align}
+いま，\(y \in \qty{-1,\ 1}\)を考えるから，\(y^2 = 1\)となる。
+また，ShermanMorrison-Woodbury公式から，
+\begin{equation}
+    \qty(\tilde{\bm{\Sigma}}^{-1} + \frac{1}{\gamma} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T})^{-1} = \qty(\tilde{\bm{\Sigma}} - \frac{\tilde{\bm{\Sigma}} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}}}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma})
+\end{equation}
+が成立する。
+よって，
+\begin{align}
+    \hat{\bm{\mu}}
+        & = \qty(\tilde{\bm{\Sigma}}^{-1} + \frac{1}{\gamma} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T})^{-1} \qty(\tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}} + \frac{y}{\gamma} \phi(\bm{x})) \\
+        & = \qty(\tilde{\bm{\Sigma}} - \frac{\tilde{\bm{\Sigma}} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}}}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma}) \qty(\tilde{\bm{\Sigma}}^{-1} \tilde{\bm{\mu}} + \frac{y}{\gamma} \phi(\bm{x})) \\
+        & = \tilde{\bm{\mu}} - \frac{\tilde{\bm{\Sigma}} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T}}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma} \tilde{\bm{\mu}} + \frac{y}{\gamma} \tilde{\bm{\Sigma}} \phi(\bm{x}) \qty(1 - \frac{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}}\phi(\bm{x})}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma}) \\
+        & = \tilde{\bm{\mu}} - \frac{\tilde{\bm{\Sigma}} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T}}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma} \tilde{\bm{\mu}} + \frac{y \tilde{\bm{\Sigma}} \phi(\bm{x})}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma} \\
+        & = \tilde{\bm{\mu}} + \frac{\tilde{\bm{\Sigma}} \phi(\bm{x})}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma} \qty(y - \phi(\bm{x})^\mathrm{T} \tilde{\bm{\mu}})
+\end{align}
+\(y \in \qty{-1,\ 1}\)から，
+\begin{align}
+    \hat{\bm{\mu}}
+        & = \tilde{\bm{\mu}} + \frac{y \tilde{\bm{\Sigma}} \phi(\bm{x})}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma} \qty(1 - \phi(\bm{x})^\mathrm{T} \tilde{\bm{\mu}} y) \\
+        & = \tilde{\bm{\mu}} + \frac{y \qty(1 - \tilde{\bm{\mu}}^\mathrm{T} \phi(\bm{x}) y)}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma} \tilde{\bm{\Sigma}} \phi(\bm{x})
+        \label{eq:mu_hat_z_lt_1}
+\end{align}
+
+\(z = 1\)のときの劣勾配を\(\bm{0}\)としてしまえば，
+式(\ref{eq:mu_hat_z_qt_1})，(\ref{eq:mu_hat_z_lt_1})をまとめて，
+\begin{equation}
+    \hat{\bm{\mu}} = \tilde{\bm{\mu}} + \frac{y \max(0,\ 1 - \tilde{\bm{\mu}}^\mathrm{T} \phi(\bm{x}) y)}{\phi(\bm{x})^\mathrm{T} \tilde{\bm{\Sigma}} \phi(\bm{x}) + \gamma} \tilde{\bm{\Sigma}} \phi(\bm{x})
+\end{equation}
+
+
+\end{document}

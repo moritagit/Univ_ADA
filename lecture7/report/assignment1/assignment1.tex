@@ -84,12 +84,12 @@
             \bm{K}^2 \bm{\theta}_y - \bm{K} \bm{\pi}_y + \lambda \bm{\theta}_y
             } \\
         & = \frac{1}{n} \qty{
-            \qty(\bm{K} + \lambda \bm{I}) \bm{\theta}_y - \bm{K} \bm{\pi}_y
+            \qty(\bm{K}^2 + \lambda \bm{I}) \bm{\theta}_y - \bm{K} \bm{\pi}_y
             }
 \end{align}
 これを\(\bm{0}\)にするような\(\bm{\theta}_y\)は，
 \begin{equation}
-    \hat{\bm{\theta}}_y = \qty(\bm{K} + \lambda \bm{I})^{-1} \bm{K} \bm{\pi}_y
+    \hat{\bm{\theta}}_y = \qty(\bm{K}^2 + \lambda \bm{I})^{-1} \bm{K} \bm{\pi}_y
 \end{equation}
 となる。
 プログラムでは，この式を用いてパラメータを求める。
