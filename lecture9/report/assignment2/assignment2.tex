@@ -1,0 +1,100 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+訓練標本の分布を\(p_\mathrm{train}\)，
+テスト標本の分布を\(p_\mathrm{test}\)，
+テスト標本における各クラスの訓練標本の分布の混合比を\(\pi\)，
+混合分布を\(q_\pi\)とする。
+二値分類を考えると，
+\begin{equation}
+    q_\pi = \pi p_\mathrm{train} (\bm{x} | y=+1) + (1-\pi) p_\mathrm{train} (\bm{x} | y=-1)
+\end{equation}
+となる。
+いま，エネルギー距離の二乗は，
+\begin{equation}
+    D_\mathrm{E}^2 (p_\mathrm{test},\ q_\pi)
+        = 2 \mathbb{E}_{\bm{x}' \sim p_\mathrm{test},\ \bm{x} \sim q_\pi} \qty[||\bm{x}' - \bm{x}||]
+            - \mathbb{E}_{\bm{x}',\ \tilde{\bm{x}}' \sim p_\mathrm{test}} \qty[||\bm{x}' - \tilde{\bm{x}}'||]
+            - \mathbb{E}_{\bm{x},\ \tilde{\bm{x}} \sim q_\pi} \qty[||\bm{x} - \tilde{\bm{x}}||]
+    \label{eq:energy_dist}
+\end{equation}
+である。
+ここで，
+\begin{align}
+    & A_{y, \tilde{y}} = \mathbb{E}_{\bm{x} \sim p_\mathrm{train} (\bm{x} | y),\ \tilde{\bm{x}} \sim p_\mathrm{train} (\bm{x} | \tilde{y})} \qty[||\bm{x} - \tilde{\bm{x}}||]
+    \label{eq:A} \\
+    & b_y = \mathbb{E}_{\bm{x}' \sim p_\mathrm{test},\ \bm{x} \sim p_\mathrm{train} (\bm{x} | y)} \qty[||\bm{x}' - \bm{x}||]
+    \label{eq:b}
+\end{align}
+とおく。
+式(\ref{eq:energy_dist})の第一項は，
+\begin{align*}
+    \mathbb{E}_{\bm{x}' \sim p_\mathrm{test},\ \bm{x} \sim q_\pi} \qty[||\bm{x}' - \bm{x}||]
+        & = \mathbb{E}_{\bm{x}' \sim p_\mathrm{test}} \qty[\mathbb{E}_{\bm{x} \sim q_\pi} \qty[||\bm{x}' - \bm{x}||]] \\
+        & = \mathbb{E}_{\bm{x}' \sim p_\mathrm{test}} \qty[
+            \pi \mathbb{E}_{\bm{x} \sim p_\mathrm{train} (\bm{x} | +1)} \qty[||\bm{x}' - \bm{x}||]
+            + (1 - \pi) \mathbb{E}_{\bm{x} \sim p_\mathrm{train} (\bm{x} | -1)} \qty[||\bm{x}' - \bm{x}||]
+            ] \\
+        & = \pi \mathbb{E}_{\bm{x}' \sim p_\mathrm{test},\ \bm{x} \sim p_\mathrm{train} (\bm{x} | +1)} \qty[||\bm{x}' - \bm{x}||]
+            + (1 - \pi) \mathbb{E}_{\bm{x}' \sim p_\mathrm{test},\ \bm{x} \sim p_\mathrm{train} (\bm{x} | -1)} \qty[||\bm{x}' - \bm{x}||] \\
+        & = \pi b_{+1} + (1 - \pi) b_{-1}
+\end{align*}
+よって，
+\begin{equation}
+    \mathbb{E}_{\bm{x}' \sim p_\mathrm{test},\ \bm{x} \sim q_\pi} \qty[||\bm{x}' - \bm{x}||]
+    = (b_{+1} - b_{-1}) \pi + b_{-1}
+    \label{eq:first}
+\end{equation}
+第二項は，
+\begin{align*}
+    \mathbb{E}_{\bm{x},\ \tilde{\bm{x}} \sim q_\pi} \qty[||\bm{x} - \tilde{\bm{x}}||]
+        & = \mathbb{E}_{\bm{x} \sim q_\pi} \qty[\mathbb{E}_{\tilde{\bm{x}} \sim q_\pi} \qty[||\bm{x} - \tilde{\bm{x}}||]] \\
+        & = \mathbb{E}_{\bm{x} \sim q_\pi} \qty[
+            \pi \mathbb{E}_{\tilde{\bm{x}} \sim p_\mathrm{train} (\bm{x} | +1)} \qty[||\bm{x} - \tilde{\bm{x}}||]
+            + (1 - \pi) \mathbb{E}_{\tilde{\bm{x}} \sim p_\mathrm{train} (\bm{x} | -1) \qty[||\bm{x} - \tilde{\bm{x}}||]}
+            ] \\
+        & = \pi \qty{
+                \pi \mathbb{E}_{\bm{x} \sim p_\mathrm{train} (\bm{x} | +1),\ \tilde{\bm{x}} \sim p_\mathrm{train} (\tilde{\bm{x}} | +1)} \qty[||\bm{x} - \tilde{\bm{x}}||]
+                + (1 - \pi) \mathbb{E}_{\bm{x} \sim p_\mathrm{train} (\bm{x} | -1),\ \tilde{\bm{x}} \sim p_\mathrm{train} (\tilde{\bm{x}} | +1)} \qty[||\bm{x} - \tilde{\bm{x}}||]
+            } \\
+        & \ \quad
+            + (1 - \pi) \qty{
+                \pi \mathbb{E}_{\bm{x} \sim p_\mathrm{train} (\bm{x} | +1),\ \tilde{\bm{x}} \sim p_\mathrm{train} (\tilde{\bm{x}} | -1)} \qty[||\bm{x} - \tilde{\bm{x}}||]
+                + (1 - \pi) \mathbb{E}_{\bm{x} \sim p_\mathrm{train} (\bm{x} | -1),\ \tilde{\bm{x}} \sim p_\mathrm{train} (\tilde{\bm{x}} | -1)} \qty[||\bm{x} - \tilde{\bm{x}}||]
+            } \\
+        & = \pi^2 A_{+1, +1} + \pi (1 - \pi) A_{-1, +1} + (1 - \pi) \pi A_{+1, -1} + (1 - \pi)^2 A_{-1, -1} \\
+        & = (A_{+1, +1} - A_{-1, +1} - A_{+1, -1} + A_{-1, -1}) \pi^2
+            + (A_{-1, +1} + A_{+1, -1} - 2 A_{-1, -1}) \pi
+            + A_{-1, -1}
+\end{align*}
+ここで，\(A_{+1, -1} = A_{-1, +1}\)から，
+\begin{equation}
+    \mathbb{E}_{\bm{x},\ \tilde{\bm{x}} \sim q_\pi} \qty[||\bm{x} - \tilde{\bm{x}}||]
+        = (-2 A_{+1, -1} + A_{+1, +1} + A_{-1, -1}) \pi^2
+            + 2 (A_{+1, -1} - A_{-1, -1}) \pi
+            + A_{-1, -1}
+    \label{eq:second}
+\end{equation}
+式(\ref{eq:energy_dist})に式(\ref{eq:first})，(\ref{eq:second})を代入して，
+\begin{align*}
+    J(\pi)
+        & = 2 \qty{(b_{+1} - b_{-1}) \pi + b_{-1}}
+            - \mathbb{E}_{\bm{x}',\ \tilde{\bm{x}}' \sim p_\mathrm{test}} \qty[||\bm{x}' - \tilde{\bm{x}}'||] \\
+        & \ \qquad
+            - \qty{
+                (-2 A_{+1, -1} + A_{+1, +1} + A_{-1, -1}) \pi^2
+                + 2 (A_{+1, -1} - A_{-1, -1}) \pi
+                + A_{-1, -1}
+                } \\
+        & = (2 A_{+1, -1} - A_{+1, +1} - A_{-1, -1}) \pi^2
+            - 2 (A_{+1, -1} - A_{-1, -1} - b_{+1} + b_{-1}) \pi \\
+        & \ \qquad
+            + \qty{2b_{-1} - A_{-1, -1} - \mathbb{E}_{\bm{x}',\ \tilde{\bm{x}}' \sim p_\mathrm{test}} \qty[||\bm{x}' - \tilde{\bm{x}}'||]}
+\end{align*}
+となる。
+
+
+
+\end{document}

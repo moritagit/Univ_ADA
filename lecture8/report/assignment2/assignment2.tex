@@ -31,14 +31,14 @@
     & \bm{\Sigma} \leftarrow \bm{\Sigma} - \frac{\bm{\Sigma} \phi(\bm{x}) \phi(\bm{x})^\mathrm{T} \bm{\Sigma}}{\phi(\bm{x})^\mathrm{T} \bm{\Sigma} \phi(\bm{x}) + \gamma}
 \end{align}
 
-
-
+\(\gamma = 1.0\)，ミニバッチのサイズを10とし，全データに対し50回イタレーションを回したときの結果を，
 以下の図\ref{fig:result}に示す。
-なお，プログラムは\pageref{listing:assignment2}ページのListing \ref{listing:assignment2}に示した。
+これを見ると，異常値に対してロバストな解が得られていることがわかる。
+プログラムは\pageref{listing:assignment2}ページのListing \ref{listing:assignment2}に示した。
 
 \begin{figure}[H]
     \centering
-    %\includegraphics[clip, width=12cm]{../figures/assignment2_result}
+    \includegraphics[clip, width=12cm]{../figures/assignment2_result}
     \caption{結果}
     \label{fig:result}
 \end{figure}
