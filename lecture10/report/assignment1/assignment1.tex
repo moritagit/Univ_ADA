@@ -1,0 +1,67 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+\begin{align}
+    & \bm{x}_i \in \mathbb{R}^{d},\ \bm{T} \in \mathbb{R}^{m \times d},\ \bm{W} \in \mathbb{R}^{n \times n},\ \bm{W}^\mathrm{T} = \bm{W} \\
+    & \bm{X} = \qty(\bm{x}_1,\ \cdots,\ \bm{x}_n) \\
+    & \bm{D} = \mathrm{diag}\qty(\sum_{i' = 1}^{n} W_{i, i'}) \\
+    & \bm{L} = \bm{D} - \bm{W}
+\end{align}
+に対し，
+\begin{equation}
+    \sum_{i, i' = 1}^{n} W_{i, i'} ||\bm{T} \bm{x}_i - \bm{T} \bm{x}_{i'}||^2 = 2 \mathrm{tr}\qty(\bm{TXL}\bm{X}^\mathrm{T} \bm{T}^\mathrm{T})
+    \label{eq:objective}
+\end{equation}
+が成立することを示す。
+
+いま，
+\begin{equation}
+    \bm{z}_i = \bm{T} \bm{x}_i
+\end{equation}
+とおくと，
+\begin{align*}
+    \sum_{i, i' = 1}^{n} W_{i, i'} ||\bm{T} \bm{x}_i - \bm{T} \bm{x}_{i'}||^2
+        & = \sum_{i, i' = 1}^{n} W_{i, i'} ||\bm{z}_i - \bm{z}_{i'}||^2 \\
+        & = \sum_{i, i' = 1}^{n} W_{i, i'} (\bm{z}_i - \bm{z}_{i'})^\mathrm{T} (\bm{z}_i - \bm{z}_{i'}) \\
+        & = \sum_{i, i' = 1}^{n} W_{i, i'} \qty{||\bm{z}_i||^2 + ||\bm{z}_{i'}||^2 - 2 \bm{z}_i^\mathrm{T} \bm{z}_{i'}}
+\end{align*}
+ここで，\(W_{i, i'} = W_{i', i}\)なので，
+\begin{align}
+    \sum_{i, i' = 1}^{n} W_{i, i'} ||\bm{T} \bm{x}_i - \bm{T} \bm{x}_{i'}||^2
+        & = 2 \sum_{i, i' = 1}^{n} W_{i, i'} \qty(||\bm{z}_i||^2 - \bm{z}_i^\mathrm{T} \bm{z}_{i'}) \notag \\
+        & = 2 \qty{\sum_{i=1}^{n} \qty(\sum_{i'=1}^{n} W_{i,i'} ||\bm{z}_i||^2) - \sum_{i, i' = 1}^{n} W_{i, i'} \bm{z}_i^\mathrm{T} \bm{z}_{i'}}
+        \label{eq:inter}
+\end{align}
+いま，
+\begin{equation}
+    \bm{Z} = \qty(\bm{z}_1,\ \cdots,\ \bm{z}_n)
+\end{equation}
+を考えると，
+\begin{equation}
+    \mathrm{tr}\qty(\bm{ZDZ}^\mathrm{T}) = \sum_{i=1}^{n} \qty(\sum_{i'=1}^{n} W_{i,i'} ||\bm{z}_i||^2)
+    \label{eq:ZDZ}
+\end{equation}
+となり，
+また，
+\begin{equation}
+    \mathrm{tr}\qty(\bm{ZWZ}^\mathrm{T}) = \sum_{i, i' = 1}^{n} W_{i, i'} \bm{z}_i^\mathrm{T} \bm{z}_{i'}
+    \label{eq:ZWZ}
+\end{equation}
+となる。
+
+式(\ref{eq:inter})，(\ref{eq:ZDZ})，(\ref{eq:ZWZ})と\(\bm{Z} = \bm{TX}\)より，
+\begin{align}
+    \sum_{i, i' = 1}^{n} W_{i, i'} ||\bm{T} \bm{x}_i - \bm{T} \bm{x}_{i'}||^2
+        & = 2\mathrm{tr}\qty(\bm{ZDZ}^\mathrm{T}) - 2\mathrm{tr}\qty(\bm{ZWZ}^\mathrm{T}) \\
+        & = 2\mathrm{tr}\qty(\bm{ZLZ}^\mathrm{T}) \\
+        & = 2 \mathrm{tr}\qty(\bm{TXL}\bm{X}^\mathrm{T} \bm{T}^\mathrm{T})
+\end{align}
+となって，式(\ref{eq:objective})が示された。
+
+
+
+
+
+\end{document}
