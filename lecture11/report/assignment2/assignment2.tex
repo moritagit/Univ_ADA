@@ -1,0 +1,145 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+標本\(\qty{(\bm{x}_i,\ y_i)}_{i=1}^{n}\)を考える。
+\(\bm{x}\)は中心化されているとする。
+つまり，
+\begin{equation}
+    \bm{\mu} = \frac{1}{n} \sum_{i=1}^{n} \bm{x}_i = \bm{0}
+    \label{eq:centering}
+\end{equation}
+とする。
+このとき，散布行列は，
+\begin{equation}
+    \bm{C} = \sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T}
+    \label{eq:scattering_matrix}
+\end{equation}
+クラス内散布行列は，
+\begin{equation}
+    \bm{S}^\mathrm{(w)} = \sum_{y=1}^{c} \sum_{i: y_i=y} \qty(\bm{x}_i - \bm{\mu}_y) \qty(\bm{x}_i - \bm{\mu}_y)^\mathrm{T}
+    \label{eq:within_class_scattering_matrix}
+\end{equation}
+クラス間散布行列は，
+\begin{equation}
+    \bm{S}^\mathrm{(b)} = \sum_{y=1}^{c} n_y \bm{\mu}_y \bm{\mu}_y^\mathrm{T}
+    \label{eq:between_class_scattering_matrix}
+\end{equation}
+である。
+ここで，\(n_y\)はクラス\(y\)の標本数であり，
+\begin{equation}
+    \bm{\mu}_y = \frac{1}{n_y} \sum_{i: y_i=y} \bm{x}_i
+    \label{eq:mean_y}
+\end{equation}
+である。
+
+いま，散布行列について，
+\begin{align*}
+    \bm{C}
+        = \sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T}
+        = \frac{1}{2} \qty(\sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T} + \sum_{i'=1}^{n} \bm{x}_{i'} \bm{x}_{i'}^\mathrm{T})
+\end{align*}
+と変形できる。
+\begin{equation*}
+    \sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T}
+        = \sum_{i'=1}^{n} \frac{1}{n} \qty(\sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T})
+        = \frac{1}{n} \sum_{i, i'=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T}
+\end{equation*}
+であることから，
+\begin{align*}
+    \bm{C}
+        = \frac{1}{2} \cdot \frac{1}{n} \sum_{i, i'}^{n} \qty(\bm{x}_i \bm{x}_{i}^\mathrm{T} + \bm{x}_{i'} \bm{x}_{i'}^\mathrm{T})
+\end{align*}
+となる。
+ここで，式(\ref{eq:centering})から，
+\begin{align*}
+    \sum_{i, i'=1}^{n} \bm{x}_i \bm{x}_{i'}^\mathrm{T}
+        & = \sum_{i=1}^{n} \bm{x}_i \qty(\sum_{i'=1}^{n} \bm{x}_{i'})^\mathrm{T} + \sum_{i'=1}^{n} \qty(\sum_{i=1}^{n} \bm{x}_i) \bm{x}_{i'}^\mathrm{T} \\
+        & = 2 \sum_{i=1}^{n} \bm{x}_i \sum_{i'=1}^{n} \bm{x}_{i'}^\mathrm{T} \\
+        & = 2 n\bm{\mu} \cdot n\bm{\mu}^\mathrm{T} \\
+        & = \bm{0}
+\end{align*}
+が成立することを用いると，結局，
+\begin{align}
+    \bm{C}
+        & = \frac{1}{2} \cdot \frac{1}{n} \sum_{i, i'=1}^{n} \qty(\bm{x}_i \bm{x}_{i}^\mathrm{T} - 2 \bm{x}_i \bm{x}_{i'}^\mathrm{T} + \bm{x}_{i'} \bm{x}_{i'}^\mathrm{T}) \notag \\
+        & = \frac{1}{2} \sum_{i, i'=1}^{n} \frac{1}{n} \qty(\bm{x}_i - \bm{x}_{i'}) \qty(\bm{x}_i - \bm{x}_{i'})^\mathrm{T}
+        \label{eq:C_pair}
+\end{align}
+得る。
+
+同様に，クラス内散布行列は，
+\begin{align*}
+    \bm{S}^\mathrm{(w)}
+        & = \sum_{y=1}^{c} \sum_{i: y_i=y} \qty(\bm{x}_i - \bm{\mu}_y) \qty(\bm{x}_i - \bm{\mu}_y)^\mathrm{T} \\
+        & = \frac{1}{2} \sum_{y=1}^{c} \frac{1}{n_y} \sum_{i, i': y_{i, i'}=y} \qty{\qty(\bm{x}_i - \bm{\mu}_y)\qty(\bm{x}_i - \bm{\mu}_y)^\mathrm{T} + \qty(\bm{x}_{i'} - \bm{\mu}_y)\qty(\bm{x}_{i'} - \bm{\mu}_y)^\mathrm{T}}
+\end{align*}
+と変形でき，
+ここで，式(\ref{eq:mean_y})から，
+\begin{align*}
+    \sum_{i, i': y_{i, i'}=y} \qty(\bm{x}_i - \bm{\mu}_y)\qty(\bm{x}_{i'} - \bm{\mu}_y)^\mathrm{T}
+        & = 2 \sum_{i: y_i=y} \qty(\bm{x}_i - \bm{\mu}_y) \cdot \sum_{i': y_i'=y} \qty(\bm{x}_{i'} - \bm{\mu}_y)^\mathrm{T} \\
+        & = 2 \qty(n_y \bm{\mu}_y - n_y \bm{\mu}_y) \qty(n_y \bm{\mu}_y - n_y \bm{\mu}_y)^\mathrm{T} \\
+        & = \bm{0}
+\end{align*}
+となることから，結局，
+\begin{align*}
+    \bm{S}^\mathrm{(w)}
+    & = \frac{1}{2} \sum_{y=1}^{c} \frac{1}{n_y} \sum_{i, i': y_{i, i'}=y} \qty{\qty(\bm{x}_i - \bm{\mu}_y)\qty(\bm{x}_i - \bm{\mu}_y)^\mathrm{T} - 2 \qty(\bm{x}_i - \bm{\mu}_y)\qty(\bm{x}_{i'} - \bm{\mu}_y)^\mathrm{T} + \qty(\bm{x}_{i'} - \bm{\mu}_y)\qty(\bm{x}_{i'} - \bm{\mu}_y)^\mathrm{T}} \\
+    & = \frac{1}{2} \sum_{y=1}^{c} \frac{1}{n_y} \sum_{i, i': y_{i, i'}=y} \qty{\qty(\bm{x}_i - \bm{\mu}_y) - \qty(\bm{x}_{i'} - \bm{\mu}_y)} \qty{\qty(\bm{x}_i - \bm{\mu}_y) - \qty(\bm{x}_{i'} - \bm{\mu}_y)}^\mathrm{T} \\
+    & = \frac{1}{2} \sum_{y=1}^{c} \frac{1}{n_y} \sum_{i, i': y_{i, i'}=y} \qty(\bm{x}_i - \bm{x}_{i'}) \qty(\bm{x}_i - \bm{x}_{i'})^\mathrm{T}
+\end{align*}
+となる。これは，
+\begin{equation}
+    Q_{i, i'}^\mathrm{(w)} =
+        \begin{cases}
+            1/n_y & (y_i = y_{i'} = y) \\
+            0 & (y_i \neq y_{i'})
+        \end{cases}
+    \label{eq:Qw}
+\end{equation}
+なる\(Q_{i, i'}^\mathrm{(w)}\)を用いて，
+\begin{equation}
+    \bm{S}^\mathrm{(w)} = \frac{1}{2} \sum_{i, i'=1}^{n} Q_{i, i'}^\mathrm{(w)} \qty(\bm{x}_i - \bm{x}_{i'}) \qty(\bm{x}_i - \bm{x}_{i'})^\mathrm{T}
+    \label{eq:Sw_pair}
+\end{equation}
+と表せる。
+
+いま，\(\bm{S}^\mathrm{(w)}\)について変形すると，
+\begin{align*}
+    \bm{S}^\mathrm{(w)}
+        & = \sum_{y=1}^{c} \sum_{i: y_i=y} \qty(\bm{x}_i - \bm{\mu}_y) \qty(\bm{x}_i - \bm{\mu}_y)^\mathrm{T} \\
+        & = \sum_{y=1}^{c} \sum_{i: y_i=y} \qty(\bm{x}_i \bm{x}_i^\mathrm{T} - 2 \bm{\mu}_y \bm{x}_i^\mathrm{T} + \bm{\mu}_y \bm{\mu}_y^\mathrm{T}) \\
+        & = \sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T} - \sum_{y=1}^{c} 2 \bm{\mu}_y \sum_{i: y_i=y} \bm{x}_i^\mathrm{T} + \sum_{y=1}^{c} n_y \bm{\mu}_y \bm{\mu}_y^\mathrm{T} \\
+        & = \sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T} - \sum_{y=1}^{c} 2 \bm{\mu}_y n_y \bm{\mu}_y^\mathrm{T} + \sum_{y=1}^{c} n_y \bm{\mu}_y \bm{\mu}_y^\mathrm{T} \\
+        & = \sum_{i=1}^{n} \bm{x}_i \bm{x}_i^\mathrm{T} - \sum_{y=1}^{c} n_y \bm{\mu}_y \bm{\mu}_y^\mathrm{T}
+\end{align*}
+となり，式(\ref{eq:scattering_matrix})，(\ref{eq:between_class_scattering_matrix})とから，
+\begin{equation}
+    \bm{C} = \bm{S}^\mathrm{(w)} + \bm{S}^\mathrm{(b)}
+    \label{eq:relation}
+\end{equation}
+が成立する。
+
+式(\ref{eq:C_pair})，(\ref{eq:Sw_pair})，(\ref{eq:relation})から，
+\begin{align}
+    \bm{S}^\mathrm{(b)}
+        & = \bm{C} - \bm{S}^\mathrm{(w)} \notag \\
+        & = \frac{1}{2} \sum_{i, i'=1}^{n} \qty(\frac{1}{n} - Q_{i, i'}^\mathrm{(w)}) \qty(\bm{x}_i - \bm{x}_{i'}) \qty(\bm{x}_i - \bm{x}_{i'})^\mathrm{T} \notag \\
+        & = \frac{1}{2} \sum_{i, i'=1}^{n} Q_{i, i'}^\mathrm{(b)} \qty(\bm{x}_i - \bm{x}_{i'}) \qty(\bm{x}_i - \bm{x}_{i'})^\mathrm{T}
+        \label{eq:Sb_pair} \\
+    Q_{i, i'}^\mathrm{(b)}
+        & = \frac{1}{n} - Q_{i, i'}^\mathrm{(w)} \notag \\
+        & =
+            \begin{cases}
+                1/n - 1/n_y & (y_i = y_{i'} = y) \\
+                1/n & (y_i \neq y_{i'})
+            \end{cases}
+        \label{eq:Qb}
+\end{align}
+となる。
+
+
+
+\end{document}
