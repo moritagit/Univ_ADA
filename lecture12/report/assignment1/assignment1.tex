@@ -1,0 +1,157 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+\begin{align}
+    & \bm{W} \in \mathbb{R}^{n \times n},\ W_{i, i'} = W_{i', i}
+    \label{eq:W} \\
+    & \bm{D} = \mathrm{diag}\qty(\sum_{i'=1}^{n} W_{i, i'})
+    \label{eq:D} \\
+    & \bm{L} = \bm{D} - \bm{W}
+    \label{eq:L}
+\end{align}
+についての固有値問題
+\begin{equation}
+    \bm{L} \bm{\psi} = \gamma \bm{D} \bm{\psi}
+    \label{eq:eigen_problem}
+\end{equation}
+の最小固有値\(\gamma_n = 0\)であり，
+対応する固有ベクトルは\(\bm{1}\)であることを示す。
+
+まず，\(\bm{L}\)の最小固有値が\(0\)であることを示す。
+これは，全ての固有値が非負であること，
+つまり\(\bm{L}\)が半正定値行列であることを示せばよい。
+よって，次式を示す。
+\begin{equation}
+    {}^\forall \bm{\alpha} \in \mathbb{R}^{n}: 
+        \bm{\alpha}^\mathrm{T} \bm{L} \bm{\alpha} \ge 0
+\end{equation}
+\(\bm{\alpha},\ \bm{L}\)を要素ごとに表すと，
+\begin{align}
+    & \bm{\alpha} =
+        \begin{bmatrix}
+            \alpha_1 & \cdots & \alpha_n
+        \end{bmatrix}^\mathrm{T}
+    \\
+    & \bm{L} =
+        \begin{bmatrix}
+            \qty(\sum_{i'=1}^{n} W_{1, i'} - W_{1, 1}) & -W_{1, 2} & \cdots & -W_{1, n} \\
+            -W_{2, 1} & \ddots & & \vdots \\
+            \vdots & & \ddots & \vdots \\
+            -W_{n, 1} & \cdots & -W_{n, n-1} & \qty(\sum_{i'=1}^{n} W_{n, i'} - W_{n, n})
+        \end{bmatrix}
+\end{align}
+となるので，
+\begin{align*}
+    \bm{L} \bm{\alpha}
+        & =
+            \begin{bmatrix}
+                \qty(\sum_{i'=1}^{n} W_{1, i'} - W_{1, 1}) & -W_{1, 2} & \cdots & -W_{1, n} \\
+                -W_{2, 1} & \ddots & & \vdots \\
+                \vdots & & \ddots & \vdots \\
+                -W_{n, 1} & \cdots & -W_{n, n-1} & \qty(\sum_{i'=1}^{n} W_{n, i'} - W_{n, n})
+            \end{bmatrix}
+            \cdot
+            \begin{bmatrix}
+                \alpha_1 \\ \vdots \\ \alpha_n
+            \end{bmatrix}
+        \\
+        & =
+            \begin{bmatrix}
+                \qty(\sum_{i'=1}^{n} W_{1, i'} - W_{1, 1}) \alpha_1 - W_{1, 2} \alpha_2 - \cdots - W_{1, n} \alpha_n \\
+                \vdots \\
+                -W_{n, 1} \alpha_1 - \cdots - W_{n, n-1} \alpha_{n-1} + \qty(\sum_{i'=1}^{n} W_{n, i'} - W_{n, n}) \alpha_n
+            \end{bmatrix}
+        \\
+        & =
+            \begin{bmatrix}
+                \qty(\sum_{i'=1}^{n} W_{1, i'}) \alpha_1 - \sum_{i'=1}^{n} W_{1, i'} \alpha_{i'} \\
+                \vdots \\
+                \qty(\sum_{i'=1}^{n} W_{n, i'}) \alpha_n - \sum_{i'=1}^{n} W_{n, i'} \alpha_{i'}
+            \end{bmatrix}
+        \\
+        & =
+        \begin{bmatrix}
+            \sum_{i'=1}^{n} W_{1, i'} (\alpha_1 - \alpha_{i'}) \\
+            \vdots \\
+            \sum_{i'=1}^{n} W_{n, i'} (\alpha_n - \alpha_{i'})
+        \end{bmatrix}
+\end{align*}
+よって，
+\begin{align*}
+    \bm{\alpha}^\mathrm{T} \bm{L} \bm{\alpha}
+        & =
+            \begin{bmatrix}
+                \alpha_1 & \cdots & \alpha_n
+            \end{bmatrix}
+            \cdot
+            \begin{bmatrix}
+                \sum_{i'=1}^{n} W_{1, i'} (\alpha_1 - \alpha_{i'}) \\
+                \vdots \\
+                \sum_{i'=1}^{n} W_{n, i'} (\alpha_n - \alpha_{i'})
+            \end{bmatrix}
+        \\
+        & = \sum_{i=1}^{n} \alpha_i W_{i, i'} (\alpha_i - \alpha_{i'})
+        \\
+        & = \sum_{i, i' = 1}^{n} W_{i, i'} \qty({\alpha_i}^2 - \alpha_i \alpha_{i'})
+        \\
+        & = \frac{1}{2} \sum_{i, i' = 1}^{n} W_{i, i'} \qty(2 {\alpha_i}^2 - 2 \alpha_i \alpha_{i'})
+        \\
+        & = \frac{1}{2} \sum_{i, i' = 1}^{n} W_{i, i'} \qty({\alpha_i}^2 + {\alpha_{i'}}^2 - 2 \alpha_i \alpha_{i'})
+        \\
+        & = \frac{1}{2} \sum_{i, i' = 1}^{n} W_{i, i'} \qty(\alpha_i - \alpha_{i'})^2
+        \\
+        & \ge 0
+\end{align*}
+となり，\(\bm{\alpha}^\mathrm{T} \bm{L} \bm{\alpha} \ge 0\)が示された。
+これより，\(\bm{L}\)の最小固有値が\(0\)であることがわかる。
+
+次に固有値\(0\)に対応する固有ベクトルが\(\bm{1}\)であることを示す。
+\begin{equation}
+    \bm{L} \bm{\psi} = \gamma \bm{D} \bm{\psi} = \bm{0}
+\end{equation}
+から，
+\begin{equation}
+    \begin{bmatrix}
+        \sum_{i'=1}^{n} W_{1, i'} (\psi_1 - \psi_{i'}) \\
+        \vdots \\
+        \sum_{i'=1}^{n} W_{n, i'} (\psi_n - \psi_{i'})
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        0 \\
+        \vdots \\
+        0
+    \end{bmatrix}
+\end{equation}
+となる。
+また，
+\begin{equation}
+    \bm{\psi}^\mathrm{T} \bm{L} \bm{\psi} = \frac{1}{2} \sum_{i, i' = 1}^{n} W_{i, i'} \qty(\psi_i - \psi_{i'})^2 = 0
+\end{equation}
+である。
+これらと\(W_{i, i'} \ge 0\)から，
+\begin{equation}
+    \psi_i = \psi_{i'} \qquad (i,\ i' = 1,\ \cdots,\ n)
+\end{equation}
+となる。
+これより，
+\begin{equation}
+    \bm{\psi} =
+        \begin{bmatrix}
+            \psi_1 & \cdots & \psi_n
+        \end{bmatrix}
+        =
+        \psi_1
+        \begin{bmatrix}
+            1 & \cdots & 1
+        \end{bmatrix}
+        = \psi_1 \bm{1}
+\end{equation}
+となる。
+よって固有値\(0\)に対応する固有ベクトルが\(\bm{1}\)であることがわかる。
+
+
+
+\end{document}
