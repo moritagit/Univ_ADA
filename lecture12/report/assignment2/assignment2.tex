@@ -9,7 +9,7 @@
 \begin{equation}
     W_{i, i'} =
         \begin{cases}
-            1 & \text{if } \bm{x}_i \in \mathrm{kNN}(\bm{x}_{i'}) \text{or } \bm{x}_{i'} \in \mathrm{kNN}(\bm{x}_i) \\
+            1 & \text{if } \bm{x}_i \in \mathrm{kNN}(\bm{x}_{i'}) \text{ or } \bm{x}_{i'} \in \mathrm{kNN}(\bm{x}_i) \\
             0 & \text{otherwise}
         \end{cases}
 \end{equation}
@@ -35,16 +35,20 @@
 
 実験では3次元データを2次元に次元削減する。
 \pageref{listing:assignment2}ページのListing \ref{listing:assignment2}にプログラムを示した。
-結果は図\ref{fig:result}に示した通りである。
+結果は図\ref{fig:result}に示した通りで，
+次元削減後の点群が3点に固まってしまうという形になった。
+原因としては，実装ミス以外で挙げるとすれば，
+最近傍類似度を1,000データ点に対して考えているから，
+\(\bm{W}\)がスパースになりすぎているのがよくないのかもしれないと思ったが，
+解決には至らなかった。
 
 
 \begin{figure}[H]
     \centering
-    %\includegraphics[clip, width=12cm]{../figures/assignment2_result}
+    \includegraphics[clip, width=15cm]{../figures/assignment2_result}
     \caption{結果}
     \label{fig:result}
 \end{figure}
-
 
 
 \end{document}
